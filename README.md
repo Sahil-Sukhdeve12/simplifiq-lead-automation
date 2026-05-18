@@ -130,10 +130,7 @@ http://localhost:3000
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/leads/submit` | Submit lead |
-| GET | `/api/leads/status/:id` | Check lead status |
-| GET | `/api/leads/history` | Get processing history |
-| GET | `/api/health` | Health check |
+| GET | `/` | Serve form |
 
 ---
 
