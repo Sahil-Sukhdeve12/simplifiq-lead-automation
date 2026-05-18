@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SimplifIQ - Lead Intake Form</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .form-container {
+      padding: 40px 30px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group.row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #1a1a1a;
+      font-size: 14px;
+    }
+
+    label .required {
+      color: #e74c3c;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.3s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    button {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .reset-btn {
+      background: #f0f0f0;
+      color: #1a1a1a;
+      border: 2px solid #e0e0e0;
+    }
+
+    .reset-btn:hover {
+      background: #e0e0e0;
+    }
+
+    .alert {
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .alert.show {
+      display: block;
+    }
+
+    .alert.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .alert.info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+
+    .processing {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .processing.show {
+      display: block;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 20px;
+      border: 4px solid #f0f0f0;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .field-info {
+      font-size: 12px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    @media (max-width: 600px) {
+      .form-group.row {
+        grid-template-columns: 1fr;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .header {
+        padding: 30px 20px;
+      }
+
+      .form-container {
+        padding: 30px 20px;
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <h1>SimplifIQ</h1>
+        <p>Lead Intelligence & Automation System</p>
+      </div>
+
+      <div class="form-container">
+        <div id="alert" class="alert"></div>
+        
+        <form id="leadForm" style="display: block;">
+          <div class="form-group row">
+            <div>
+              <label for="firstName">
+                First Name <span class="required">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="firstName" 
+                name="firstName" 
+                required
+                placeholder="Alice"
+              >
+              <div class="error-message" id="error-firstName"></div>
+            </div>
+            <div>
+              <label for="lastName">
+                Last Name <span class="required">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="lastName" 
+                name="lastName" 
+                required
+                placeholder="Brown"
+              >
+              <div class="error-message" id="error-lastName"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">
+              Email Address <span class="required">*</span>
+            </label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              required
+              placeholder="alice@company.com"
+            >
+            <div class="field-info">We'll send your personalized report here</div>
+            <div class="error-message" id="error-email"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="companyName">
+              Company Name <span class="required">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="companyName" 
+              name="companyName" 
+              required
+              placeholder="SimplifIQ"
+            >
+            <div class="error-message" id="error-companyName"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="companyWebsite">
+              Company Website
+            </label>
+            <input 
+              type="url" 
+              id="companyWebsite" 
+              name="companyWebsite" 
+              placeholder="https://www.company.com"
+            >
+            <!-- <div class="field-info">Optional - helps us research your company (e.g., https://example.com)</div> -->
+            <div class="error-message" id="error-companyWebsite"></div>
+          </div>
+
+          <div class="form-group row">
+            <div>
+              <label for="industry">
+                Industry
+              </label>
+              <input 
+                type="text" 
+                id="industry" 
+                name="industry" 
+                placeholder="Technology, Finance, etc."
+              >
+              <div class="error-message" id="error-industry"></div>
+            </div>
+            <div>
+              <label for="companySize">
+                Company Size
+              </label>
+              <select id="companySize" name="companySize">
+                <option value="">Select...</option>
+                <option value="1-10">1-10 employees</option>
+                <option value="11-50">11-50 employees</option>
+                <option value="51-200">51-200 employees</option>
+                <option value="201-500">201-500 employees</option>
+                <option value="501-1000">501-1000 employees</option>
+                <option value="1000+">1000+ employees</option>
+              </select>
+              <div class="error-message" id="error-companySize"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">
+              Phone Number
+            </label>
+            <input 
+              type="tel" 
+              id="phone" 
+              name="phone" 
+              placeholder="+91 (955) 000-0000"
+            >
+            <div class="error-message" id="error-phone"></div>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="submit-btn" id="submitBtn">
+              Generate My Report
+            </button>
+            <button type="reset" class="reset-btn">
+              Clear Form
+            </button>
+          </div>
+        </form>
+
+        <div id="processing" class="processing">
+          <div class="spinner"></div>
+          <h3>Processing Your Request</h3>
+          <p style="color: #666; margin-top: 10px;">
+            We're enriching your company data, generating your personalized report, and preparing it for delivery...
+          </p>
+          <div id="processingSteps" style="margin-top: 20px; text-align: left; font-size: 14px;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('leadForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const processingDiv = document.getElementById('processing');
+    const alertDiv = document.getElementById('alert');
+    const processingSteps = document.getElementById('processingSteps');
+
+    /**
+     * Show alert message
+     */
+    function showAlert(message, type = 'info') {
+      alertDiv.className = `alert show ${type}`;
+      alertDiv.textContent = message;
+      alertDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    /**
+     * Hide alert
+     */
+    function hideAlert() {
+      alertDiv.className = 'alert';
+    }
+
+    /**
+     * Show/hide processing state
+     */
+    function setProcessing(isProcessing) {
+      if (isProcessing) {
+        form.style.display = 'none';
+        processingDiv.classList.add('show');
+      } else {
+        form.style.display = 'block';
+        processingDiv.classList.remove('show');
+        processingSteps.innerHTML = '';
+      }
+    }
+
+    /**
+     * Update processing steps display
+     */
+    function updateProcessingSteps(steps) {
+      processingSteps.innerHTML = steps.map(step => `
+        <div style="padding: 8px; border-left: 3px solid ${step.status === 'completed' ? '#27ae60' : step.status === 'failed' ? '#e74c3c' : '#f39c12'};">
+          <strong>${step.name}:</strong> 
+          <span>${step.status === 'completed' ? '✓ ' : step.status === 'failed' ? '✗ ' : '⏳ '}${step.status}</span>
+          ${step.duration ? `<span style="color: #999;"> (${step.duration}ms)</span>` : ''}
+        </div>
+      `).join('');
+    }
+
+    /**
+     * Clear error messages
+     */
+    function clearErrors() {
+      document.querySelectorAll('.error-message').forEach(el => {
+        el.classList.remove('show');
+        el.textContent = '';
+      });
+    }
+
+    /**
+     * Display validation errors
+     */
+    function displayErrors(errors) {
+      clearErrors();
+      errors.forEach(error => {
+        const errorEl = document.getElementById(`error-${error.field}`);
+        if (errorEl) {
+          errorEl.classList.add('show');
+          errorEl.textContent = error.message;
+        }
+      });
+    }
+
+    /**
+     * Handle form submission
+     */
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearErrors();
+      hideAlert();
+      setProcessing(true);
+      submitBtn.disabled = true;
+
+      try {
+        // Get form data
+        const formData = new FormData(form);
+        const data = {
+          firstName: formData.get('firstName'),
+          lastName: formData.get('lastName'),
+          email: formData.get('email'),
+          companyName: formData.get('companyName'),
+          companyWebsite: formData.get('companyWebsite') || '',
+          industry: formData.get('industry') || '',
+          companySize: formData.get('companySize') || '',
+          phone: formData.get('phone') || ''
+        };
+
+        // Submit to server
+        const response = await fetch('/api/leads/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        console.log('Server response:', result);
+
+        if (!response.ok) {
+          console.error('Server error response:', result);
+          // Display field errors if available
+          if (result.details?.errors && Array.isArray(result.details.errors)) {
+            console.log('Validation errors:', result.details.errors);
+            displayErrors(result.details.errors);
+            showAlert('Please correct the errors above', 'error');
+          } else if (result.errors && Array.isArray(result.errors)) {
+            console.log('Validation errors:', result.errors);
+            displayErrors(result.errors);
+            showAlert('Please correct the errors above', 'error');
+          } else {
+            console.log('Server error message:', result.message);
+            showAlert(`Error: ${result.message || 'Failed to process lead'}`, 'error');
+          }
+          setProcessing(false);
+          submitBtn.disabled = false;
+          return;
+        }
+
+        if (!result.success && result.details?.errors) {
+          displayErrors(result.details.errors);
+          showAlert('Please correct the errors above', 'error');
+          setProcessing(false);
+          submitBtn.disabled = false;
+          return;
+        }
+
+        if (result.success && result.details?.steps) {
+          updateProcessingSteps(result.details.steps);
+        }
+
+        if (result.details?.status === 'completed') {
+          const emailStep = result.details.steps.find(s => s.name === 'Email Delivery');
+          const emailSent = emailStep && emailStep.status === 'completed';
+          showAlert(
+            `✓ Success! Your personalized report has been generated. ${emailSent ? `It has been sent to ${data.email}.` : 'Email delivery is not configured, but your report is ready!'}`,
+            'success'
+          );
+          form.reset();
+          
+          setTimeout(() => {
+            setProcessing(false);
+            submitBtn.disabled = false;
+          }, 3000);
+        } else if (result.status === 202) {
+          showAlert('Your request is being processed. This may take a moment...', 'info');
+        } else {
+          const errorMessage = result.errors?.[0] || result.message || 'An error occurred';
+          showAlert(`Error: ${errorMessage}`, 'error');
+          setProcessing(false);
+          submitBtn.disabled = false;
+        }
+      } catch (error) {
+        console.error('Submission error:', error);
+        showAlert(`Error: ${error.message}`, 'error');
+        setProcessing(false);
+        submitBtn.disabled = false;
+      }
+    });
+
+    // Debug: Log form data on submit attempt
+    form.addEventListener('submit', (e) => {
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData);
+      console.log('Form data being submitted:', data);
+    });
+
+    // Real-time validation feedback
+    ['firstName', 'lastName', 'email', 'companyName'].forEach(fieldId => {
+      const field = document.getElementById(fieldId);
+      if (field) {
+        field.addEventListener('blur', () => {
+          const errorEl = document.getElementById(`error-${fieldId}`);
+          if (!field.value.trim() && errorEl) {
+            errorEl.classList.add('show');
+            errorEl.textContent = `${field.previousElementSibling.textContent.replace(' *', '')} is required`;
+          }
+        });
+
+        field.addEventListener('input', () => {
+          const errorEl = document.getElementById(`error-${fieldId}`);
+          if (field.value.trim() && errorEl) {
+            errorEl.classList.remove('show');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
