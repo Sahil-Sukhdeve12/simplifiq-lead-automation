@@ -52,7 +52,12 @@ PDF Report Generation
 Email / Google Integrations
         ↓
 Lead Tracking & Storage
+```
+
+---
 
 ## Working Module
 
-<img width="618" height="840" alt="image" src="https://github.com/user-attachments/assets/db8189fa-0ad3-4920-a1c0-df96d6791c6a" />
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/db8189fa-0ad3-4920-a1c0-df96d6791c6a" width="700"/>
+</p>
