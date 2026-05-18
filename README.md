@@ -144,6 +144,29 @@ http://localhost:3000
 
 ---
 
+## Error Handling & Fallbacks
+
+- Uses `Promise.allSettled()` for resilient parallel API execution
+- Handles missing company information gracefully
+- PDF generation continues even if some enrichment APIs fail
+- Email failures do not crash report generation
+- Google API failures are logged without interrupting workflow
+- Joi validation prevents invalid lead submissions
+
+  ---
+
+  ## Future Improvements
+
+- Redis caching for faster enrichment
+- Authentication & authorization
+- Database integration (PostgreSQL/MongoDB)
+- Rate limiting & API protection
+- AI-powered lead insights
+- Batch lead processing
+- Multi-language report support
+
+  ---
+
 ## License
 
 MIT License
