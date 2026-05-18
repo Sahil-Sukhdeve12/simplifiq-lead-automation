@@ -10,14 +10,16 @@ const fs = require('fs');
  * Initialize email transporter
  */
 function createTransporter() {
-  if (!process.env.SMTP_USER || !process.env.SMTP_PASSWORD) {
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASSWORD || !process.env.SMTP_HOST || !process.env.SMTP_PORT) {
     throw new Error(
-      'Email configuration missing. Set SMTP_USER and SMTP_PASSWORD in .env'
+      'Email configuration missing. Set SMTP_USER, SMTP_PASSWORD, SMTP_HOST, and SMTP_PORT in .env'
     );
   }
 
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT, 10),
+    secure: false,
 
     auth: {
       user: process.env.SMTP_USER,
