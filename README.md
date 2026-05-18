@@ -61,3 +61,92 @@ Lead Tracking & Storage
 <p align="center">
   <img src="https://github.com/user-attachments/assets/db8189fa-0ad3-4920-a1c0-df96d6791c6a" width="700"/>
 </p>
+
+---
+
+## Installation & Setup
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/your-username/simplifiq-lead-automation.git
+cd simplifiq-lead-automation
+```
+
+---
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+---
+
+### 3. Create Environment Variables
+
+Create a `.env` file in the root directory.
+
+```env
+PORT=3000
+
+# Email Configuration
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
+
+# Google Integration (Optional)
+GOOGLE_SHEETS_ID=your-sheet-id
+GOOGLE_DRIVE_FOLDER_ID=your-folder-id
+GOOGLE_SERVICE_ACCOUNT_KEY_FILE=./.gcp-service-account.json
+```
+
+---
+
+### 4. Start Development Server
+
+```bash
+npm run dev
+```
+
+Or:
+
+```bash
+npm start
+```
+
+---
+
+### 5. Open in Browser
+
+```bash
+http://localhost:3000
+```
+
+---
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/leads/submit` | Submit lead |
+| GET | `/api/leads/status/:id` | Check lead status |
+| GET | `/api/leads/history` | Get processing history |
+| GET | `/api/health` | Health check |
+
+---
+
+## Future Enhancements
+
+- AI-powered lead scoring
+- CRM integrations
+- Advanced analytics dashboard
+- WhatsApp & Slack notifications
+- Multi-language support
+
+---
+
+## License
+
+MIT License
